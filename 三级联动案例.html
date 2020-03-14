@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>三级联动案例</title>
+    <style>
+        select{width: 200px;height: 30px;}
+
+    </style>
+</head>
+<body>
+    <span>省</span>
+    <select id="sheng">
+        <option>请选择</option>
+    </select>
+    <span>市:</span>
+    <select id="shi"></select>
+    <span>区:</span>
+    <select id="qu"></select>
+
+    <script>
+        var shengIndex=0;//表示选了第几个省，默认是第一个
+        var shengSelect=document.querySelector('#sheng');
+        var shiSelect=document.querySelector('#shi');
+        var quSelect=document.querySelector('#qu');
+
+
+        var shengArr=['山西省','辽宁省','福建省'];
+        var shiArr=[['太原市','长治市','运城市'],['铁岭市','辽阳市'],['三明市','厦门市','泉州市']];
+        var quArr=[
+            [['太原1区','太原2区','太原3区'],['长治1区','长治2区'],['运城1区','运城2区']],
+            [['铁岭一区','铁岭2区'],['辽阳1区','辽阳2区']],
+            [['山明1区','山明2区','山明3区'],['厦门1区','厦门2区'],['泉州1区','厦门2区']]
+        ];
+        for (var i=0;i<shengArr.length;i++){
+            var shengOption=new Option(shengArr[i]);
+            shengSelect.options.add(shengOption);
+
+        }
+        shengSelect.onchange=function (eve) {
+            shengIndex=eve.target.selectedIndex-1;   //为了让省的数组对上
+            // console.log(shengIndex);
+            if (shengIndex==-1) {
+                shiSelect.options.length=0;
+                quSelect.options.length=0;
+            }
+            else{ //添加市内容之前先清空市区的内容
+                shiSelect.options.length=0;
+                quSelect.options.length=0;
+                //根据省的序号，加载时市的内容
+                for(var j=0;j<shiArr[shengIndex].length;j++){
+                    var shiOption=new Option(shiArr[shengIndex][j]);
+                    shiSelect.options.add(shiOption);
+                 }
+
+                //加载所选省的第一个市的区（默认）
+                for (var k=0;k<quArr[shengIndex][0].length;k++){
+                    var quOption=new Option(quArr[shengIndex][0][k]);
+                    quSelect.options.add(quOption);
+
+                }
+
+            }
+
+        };
+        //市select的change事件
+        shiSelect.onchange=function (eve) {
+            var shiIndex=eve.target.selectedIndex;
+            //添加内容之前先清空原油的内容
+            quSelect.options.length=0;
+            //给区加载option
+            for (var m=0;m<quArr[shengIndex][shiIndex].length;m++){
+                var quOption=new Option(quArr[shengIndex][shiIndex][m]);
+                quSelect.options.add(quOption);
+
+
+
+            }
+        }
+
+
+
+
+
+
+
+    </script>
+
+
+</body>
+</html>
